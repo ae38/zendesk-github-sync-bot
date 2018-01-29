@@ -103,14 +103,14 @@ Need to check this ticket!
 
 ## PREPARATION
 
-- copy `.env.sample` into `.env` file and edit it values
-- Zendesk: create a **hidden** custom text field in Zendesk that will store the link to related Github issue. When Zendesk ticket is copied into Github then the bot will also store URL to Github issue in that field. You will need to set ID of this field in `.env`
-- Zendesk: optionally create a public custom text field in Zendesk that will allow use to select the product or service name. The bot will read its value from Zendesk and will copy to Github so it will be clear what is the related service/product name. You will need to set ID of this field in `.env`
-- Zendesk: get API key value to access tickets
-- Zendesk - to enable testing mode: create one Zendesk ticket for testing purposes and get its ID. Set this ID to `TESTING_ZENDESK_TICKET_ID` so the bot will work with this ticket only and will skip all other tickets.
-- Github: create separate repository called `inbox`.
-- Github: create separate user with access to this repository only. 
-- Github: get API key for this new user so the bot will use it to access this `inbox` repo
+- **Zendesk**:Enable `On Hold` status in Zendesk. The bot uses this status to mark tickets which are already synced with Github repo. To enable `On Hold` status please see https://support.zendesk.com/hc/en-us/articles/203661576-Adding-the-On-hold-ticket-status-to-Zendesk-Support
+- **Zendesk**: create a **hidden** custom text field in Zendesk that will store the link to related Github issue. When Zendesk ticket is copied into Github then the bot will also store URL to Github issue in that field. You will need to set ID of this field in `.env`
+- **Zendesk**: optionally create a public custom text field in Zendesk that will allow use to select the product or service name. The bot will read its value from Zendesk and will copy to Github so it will be clear what is the related service/product name. You will need to set ID of this field in `.env`
+- **Zendesk**: get API key value to access tickets
+- **Zendesk**: to enable the testing mode: create one Zendesk ticket for testing purposes and get its ID. Set this ID to `TESTING_ZENDESK_TICKET_ID` so the bot will work with this ticket only and will skip all other tickets.
+- **Github**: create separate repository called `inbox`.
+- **Github**: create separate user with access to this repository only. 
+- **Github**: get API key for this new user so the bot will use it to access this `inbox` repo
 - Fill in values in the `.env` file:
 
 ```
@@ -142,43 +142,39 @@ GITHUB_ORGANIZATION=myorg
 TESTING_ZENDESK_TICKET_ID=
 ```
 - try to run locally 
-- create new bot on herok and deploy to heroku
-- try to reopen ticket in zendesk, try to send reply from Github
-- configure the Heroku Scheduler to call your bot in every mode every 10/20/60 minutes (it is up you to set the frequency of syncing)
-- confirm that all works OK
+- **Zendesk**: try to reopen the testing ticket in zendesk, and then it will be try to send reply from Github
+- try to run your bot app locally to confirm the syncing is working. You should run manually in every mode
+- Confirm that all works OK locally
 - set `TESTING_ZENDESK_TICKET_ID` to empty value and redeploy the bot to run in `production` mode that will work with all Zendesk tickets now.
+- **Heroku**: create new app on Heroku and deploy the app to heroku
+- **Heroku**: configure the Heroku Scheduler to call your bot in every mode every 10/20/60 minutes (it is up you to set the frequency of syncing)
+- **ENJOY**
 
-
-## RUNNING THE BOT ON HEROKU:
-
-Create node.js bot in Heroku
-Add free Scheduler addon
-Open Scheduler addon settings
-Add the following commands to run every 15 minutes:
+## RUNNING THE BOT ON HEROKU OR LOCALLY
 
 1. Create/update github issues from Zendesk new and re-opened tickets:
 
-`worker --step zendesk-github` 
+Heroku via Cron Scheduler Addon: `worker --step zendesk-github` 
 
-you may run local version with: `node sync.js --step zendesk-github`) 
+Local machine: `node sync.js --step zendesk-github`) 
 
 2. Publish github comments marked with `tksolution` as replies to zendesk tickets:
 
-`worker --step github-zendesk` 
+Heroku via Cron Scheduler Addon: `worker --step github-zendesk` 
 
-you may run manually on local machine: `node sync.js --step github-zendesk`
+Local machine: `node sync.js --step github-zendesk`
 
 3. Publish github comment marked with `tkarticle` as public articles in Zendesk Knowledgebase:
 
-`worker --step github-zendesk-kb`
+Heroku via Cron Scheduler Addon: `worker --step github-zendesk-kb`
 
-you may run manually on the local machine: `node sync.js --step github-zendesk-kb`
+Local machine: `node sync.js --step github-zendesk-kb`
 
 4. Copy github issue containing comment `tkcopy` from the current repo to another given repo 
 
-`worker --step github-copy`
+Heroku via Cron Scheduler Addon: : `worker --step github-copy`
 
-you may run manually on the local machine: `node sync.js --step github-copy`
+Local machine: `node sync.js --step github-copy`
 
 ## LICENSE
 
