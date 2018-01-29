@@ -1,0 +1,22 @@
+{
+  "name": "zendesk",
+  "version": "1.0.0",
+  "description": "Zendesk <-> Github sync app. Made by ByteScout, copyright (c) 2017-2018",
+  "main": "zendeskGithub",
+  "dependencies": {
+    "async": "2.1.5",
+    "dotenv": "^4.0.0",
+    "escape-html": "^1.0.3",
+    "node-fetch": "1.0.0",
+    "yargs": "6.6.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "4.8.4"
+  },
+  "author": "",
+  "license": "MIT"
+}
