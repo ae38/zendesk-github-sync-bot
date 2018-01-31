@@ -777,13 +777,17 @@ function updateGithubIssue(zendeskTicketId, userInfo, githubIssueUrl, productNam
 // searches and extracts zendesk ticket url and ticket id from given string
 function extractZendeskTicketInfo(body) {
 
+    if(body==null || (body && body == ''))
+        return null;
+
     try {
+        
         // console.log('zendesk item body' + item.body);
         var reg = new RegExp('https\\:\\/\\/' + process.env.ZENDESK_SUBDOMAIN + '\\.zendesk\\.com\\S+', 'i');
         var matches = reg.exec(body);
         // console.log('matches: ' + matches);
 
-        if (matches.length > 0) {
+        if (matches && matches.length > 0) {
             var zendeskTicketInfo = {
                 Url: '',
                 Id: ''
@@ -844,8 +848,12 @@ function githubToZendesk(githubRepoName, clbkFunc) {
                         var zendeskUrl = '';
                         var zendeskTicketId = '';
 
+                        var zendeskUrlInfo = null;
+                        
                         debugger;
+                        
                         zendeskUrlInfo = extractZendeskTicketInfo(item.body);
+                        
                         if (zendeskUrlInfo) {
                             zendeskUrl = zendeskUrlInfo.Url;
                             zendeskTicketId = zendeskUrlInfo.Id;
