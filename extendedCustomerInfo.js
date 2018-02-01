@@ -78,7 +78,7 @@ module.exports = {
                     // adding url information if any for the user
                     if(resjs.dashboard)
                     {
-                        info += 'User URL' + resjs.dashboard + '\r\n';
+                        info += 'User URL: ' + resjs.dashboard + '\r\n';
                     }
     
                 }
